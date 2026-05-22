@@ -124,41 +124,39 @@ def predecir(modelo:str,data:dict):
 
 @app.get("/historial")
 def obtener_historial():
-
-    db=SessionLocal()
-
+    db = SessionLocal()
     try:
+        datos = db.query(Historial).limit(10).all()
 
-        datos=db.query(
-            Historial
-        ).all()
-
-        return[
-
+        return [
             {
-
-            "id":x.id,
-            "modelo":x.modelo,
-            "clase":x.clase,
-            "resultado":x.resultado,
-
-            "recomendaciones":
-
-                x.recomendaciones.split(", ")
-                if x.recomendaciones
-                else []
-
+                "id": x.id,
+                "modelo": x.modelo,
+                "clase": x.clase,
+                "resultado": x.resultado,
+                "recomendaciones": x.recomendaciones
             }
-
             for x in datos
-
         ]
-
     finally:
-
         db.close()
 
+@app.get("/historial-test")
+def test():
+    db = SessionLocal()
+    try:
+        import time
+        start = time.time()
 
+        datos = db.query(Historial).limit(5).all()
+
+        return {
+            "time": time.time() - start,
+            "count": len(datos)
+        }
+    finally:
+        db.close()
+        
 @app.post("/analizar_audio/{modelo}")
 async def analizar_audio(
 modelo:str,
