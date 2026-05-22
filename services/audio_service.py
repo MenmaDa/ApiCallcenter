@@ -3,6 +3,8 @@ import shutil
 import subprocess
 import whisper
 
+os.system("apt-get update && apt-get install -y ffmpeg")
+
 modelo = whisper.load_model("base")
 
 
