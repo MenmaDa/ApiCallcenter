@@ -1,3 +1,5 @@
+import subprocess
+
 from fastapi import FastAPI, UploadFile, File
 import joblib
 import numpy as np
@@ -285,3 +287,21 @@ def obtener_dataset():
     finally:
 
         db.close()
+        
+@app.get("/test-ffmpeg")
+def test_ffmpeg():
+    try:
+        resultado = subprocess.check_output(
+            ["ffmpeg", "-version"]
+        ).decode()
+
+        return {
+            "estado": "ok",
+            "mensaje": resultado
+        }
+
+    except Exception as e:
+        return {
+            "estado": "error",
+            "mensaje": str(e)
+        }
