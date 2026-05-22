@@ -305,3 +305,11 @@ def test_ffmpeg():
             "estado": "error",
             "mensaje": str(e)
         }
+
+import os
+
+@app.get("/debug-path")
+def debug_path():
+    return {
+        "PATH": os.environ["PATH"],
+    }
